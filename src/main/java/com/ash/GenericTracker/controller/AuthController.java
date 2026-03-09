@@ -1,4 +1,4 @@
 package com.ash.GenericTracker.controller;
 
-public class authController {
+public class AuthController {
 }
