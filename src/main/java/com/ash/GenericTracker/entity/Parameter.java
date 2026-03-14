@@ -1,10 +1,7 @@
 package com.ash.GenericTracker.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,16 +12,18 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Parameter {
     @Id
     @GeneratedValue
     private UUID id;
     @ManyToOne
     @JoinColumn(name = "bucket_id", nullable = false)
-    private Bucket bucketId;
-    private String paramName;
+    private Bucket bucketId; //JPA stores only bucket id here.
+    private String parameterName;
     private String dataType; // Time, Number, Text
     private Boolean isActive = true;
+    private int parameterOrder;
     private LocalDateTime createdAt;
     @PrePersist
     protected void onCreate(){
