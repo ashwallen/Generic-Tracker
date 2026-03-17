@@ -69,6 +69,4 @@ public class BucketServiceImpl implements BucketService{
 
         }).toList();
     }
-
-
 }

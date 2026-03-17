@@ -1,11 +1,9 @@
 package com.ash.GenericTracker.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
@@ -17,6 +15,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Entry {
     @Id
     @GeneratedValue
@@ -27,7 +26,7 @@ public class Entry {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
-    private Date entryDate;
+    private LocalDate entryDate;
     private String notes;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;

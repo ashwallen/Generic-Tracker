@@ -1,6 +1,7 @@
 package com.ash.GenericTracker.repository;
 
 import com.ash.GenericTracker.entity.Bucket;
+import com.ash.GenericTracker.entity.Entry;
 import com.ash.GenericTracker.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

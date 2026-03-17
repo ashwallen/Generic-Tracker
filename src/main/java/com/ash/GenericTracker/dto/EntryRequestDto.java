@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EntryRequestDto {
-    private String bucketId;
+    private UUID bucketId;
     private String notes;
     private String Date;
 }
