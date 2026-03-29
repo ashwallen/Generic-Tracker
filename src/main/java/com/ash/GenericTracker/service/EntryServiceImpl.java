@@ -8,14 +8,15 @@ import com.ash.GenericTracker.repository.BucketRepository;
 import com.ash.GenericTracker.repository.EntryRepository;
 import com.ash.GenericTracker.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
+@Service
+//@RequiredArgsConstructor
 public class EntryServiceImpl implements EntryService {
 
     private final EntryRepository entryRepository;
@@ -43,8 +44,8 @@ public class EntryServiceImpl implements EntryService {
         }
 
         // 4️⃣ One entry per day validation
-        boolean exists = entryRepository.existsByBucketIdAndEntryDate(
-                bucket.getId(),
+        boolean exists = entryRepository.existsByBucketId_IdAndEntryDate(
+                request.getBucketId(),
                 entryDate
         );
 
@@ -74,7 +75,7 @@ public class EntryServiceImpl implements EntryService {
     @Override
     public EntryResponseDto getEntry(UUID entryId, UUID userId) {
 
-        Entry entry = entryRepository.findByIdAndUserId(entryId, userId)
+        Entry entry = entryRepository.findByIdAndUserId_Id(entryId, userId)
                 .orElseThrow(() -> new RuntimeException("Entry not found or unauthorized"));
 
         return EntryResponseDto.builder()
@@ -88,7 +89,7 @@ public class EntryServiceImpl implements EntryService {
     @Override
     public EntryResponseDto updateEntry(UUID entryId, EntryRequestDto request, UUID userId) {
 
-        Entry entry = entryRepository.findByIdAndUserId(entryId, userId)
+        Entry entry = entryRepository.findByIdAndUserId_Id(entryId, userId)
                 .orElseThrow(() -> new RuntimeException("Entry not found or unauthorized"));
 
         LocalDate entryDate = LocalDate.parse(request.getDate());
@@ -105,7 +106,7 @@ public class EntryServiceImpl implements EntryService {
         // If date changed → check duplicate
         if (!entry.getEntryDate().equals(entryDate)) {
 
-            boolean exists = entryRepository.existsByBucketIdAndEntryDate(
+            boolean exists = entryRepository.existsByBucketId_IdAndEntryDate(
                     entry.getBucketId().getId(),
                     entryDate
             );
@@ -132,13 +133,13 @@ public class EntryServiceImpl implements EntryService {
     @Override
     public void deleteEntry(UUID entryId, UUID userId) {
         userRepository.findById(userId).orElseThrow(()->new RuntimeException("User Does Not Exist"));
-        Entry entry = entryRepository.findByIdAndUserId(entryId,userId).orElseThrow(()->new RuntimeException("Entry Does not Exist"));
+        Entry entry = entryRepository.findByIdAndUserId_Id(entryId,userId).orElseThrow(()->new RuntimeException("Entry Does not Exist"));
         entryRepository.delete(entry);
     }
 
     @Override
     public List<EntryResponseDto> getEntriesByBucket(UUID bucketId, UUID userId) {
-        List<Entry>entries = entryRepository.findByBucketIdAndUserIdOrderByEntryDateDesc(bucketId,userId);
+        List<Entry>entries = entryRepository.findByBucketId_IdAndUserId_IdOrderByEntryDateDesc(bucketId,userId);
         return entries.stream()
                 .map( entry -> EntryResponseDto.builder()
                         .bucketId(entry.getBucketId().getId())

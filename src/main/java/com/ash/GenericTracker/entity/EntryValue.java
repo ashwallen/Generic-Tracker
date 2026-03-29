@@ -27,6 +27,10 @@ public class EntryValue {
     @JoinColumn(name = "parameter_id", nullable = false)
     private Parameter parameter;
 
+    @ManyToOne
+    @JoinColumn(name = "entry_row_id",nullable = false)
+    private EntryRow entryRow;
+
     private String valueText;
 
     private Double valueNumber;

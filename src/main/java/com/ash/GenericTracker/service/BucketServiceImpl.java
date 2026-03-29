@@ -11,11 +11,13 @@ import com.ash.GenericTracker.repository.ParameterRepository;
 import com.ash.GenericTracker.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
+@Service
 public class BucketServiceImpl implements BucketService{
 
     private UserRepository userRepository;
@@ -42,6 +44,7 @@ public class BucketServiceImpl implements BucketService{
                         .bucketId(bucket)
                         .dataType(p.getDataType())
                         .parameterName(p.getName())
+                        .isActive(true)
                         .parameterOrder(p.getParameterOrder()).build()).toList();
 
         parameterRepository.saveAll(param);
@@ -54,7 +57,7 @@ public class BucketServiceImpl implements BucketService{
 
         return buckets.stream().map(bucket ->{
 
-            List<Parameter>parameter = parameterRepository.findByBucketIdAndIsActiveTrueOrderByParameterOrder(bucket);
+            List<Parameter>parameter = parameterRepository.findByBucketId_IdAndIsActiveTrueOrderByParameterOrder(bucket.getId());
 
             List<ParameterDto>parameterResponse = parameter.stream().map(param -> ParameterDto.builder()
                     .name(param.getParameterName())

@@ -1,14 +1,14 @@
 package com.ash.GenericTracker.repository;
 
-import com.ash.GenericTracker.entity.EntryValue;
+import com.ash.GenericTracker.entity.EntryRow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
+
 @Repository
-public interface EntryValueRepository extends JpaRepository<EntryValue, UUID> {
+public interface EntryRowRepository extends JpaRepository<EntryRow, UUID> {
 
-    List<EntryValue> findByEntryId(UUID entryId);
-
+    List<EntryRow> findByEntryIdOrderByRowIndex(UUID entryId);
 }

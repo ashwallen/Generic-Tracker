@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface EntryRepository extends JpaRepository<Entry, UUID> {
-    boolean existsByBucketIdAndEntryDate(UUID bucketId, LocalDate entryDate);
+    boolean existsByBucketId_IdAndEntryDate(UUID bucketId, LocalDate entryDate);
 
-    Optional<Entry> findByIdAndUserId(UUID entryId, UUID userId);
+    Optional<Entry> findByIdAndUserId_Id(UUID entryId, UUID userId);
 
-    List<Entry> findByBucketIdAndUserIdOrderByEntryDateDesc(UUID bucketId, UUID userId);
+    List<Entry> findByBucketId_IdAndUserId_IdOrderByEntryDateDesc(UUID bucketId, UUID userId);
 }
