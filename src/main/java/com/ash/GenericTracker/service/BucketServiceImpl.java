@@ -27,6 +27,7 @@ public class BucketServiceImpl implements BucketService{
     @Override
     @Transactional
     public Bucket createBucket(BucketRequestDto request) {
+//data type check ?, same parameter order no. ?
 
         User user  = userRepository.findById(request.getUserId())
                 .orElseThrow(()->new RuntimeException("User is not a valid user"));
