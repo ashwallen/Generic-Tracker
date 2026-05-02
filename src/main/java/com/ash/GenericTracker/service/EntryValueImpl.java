@@ -165,4 +165,19 @@ public class EntryValueImpl implements EntryValueService{
             }
         }
     }
+
+    @Override
+    @Transactional
+    public void deleteRow(UUID rowId, UUID userId) {
+
+        EntryRow row = entryRowRepository.findById(rowId)
+                .orElseThrow(() -> new RuntimeException("Row not found"));
+
+        // 🔐 Ownership validation
+        if (!row.getEntry().getUserId().getId().equals(userId)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        entryRowRepository.delete(row);
+    }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,6 +28,9 @@ public class EntryRow {
 
     // Helps maintain order in UI (row 1, row 2, etc.)
     private Integer rowIndex;
+
+    @OneToMany(mappedBy = "entryRow", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EntryValue> entryValues = new ArrayList<>();
 
     private LocalDateTime createdAt;
 

@@ -11,6 +11,7 @@ import com.ash.GenericTracker.repository.ParameterRepository;
 import com.ash.GenericTracker.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class BucketServiceImpl implements BucketService{
 
     private UserRepository userRepository;
@@ -31,13 +33,13 @@ public class BucketServiceImpl implements BucketService{
 
         User user  = userRepository.findById(request.getUserId())
                 .orElseThrow(()->new RuntimeException("User is not a valid user"));
-
+        log.info("User is fetched : {}",user.getName());
         Bucket bucket = Bucket.builder()
                 .bucketName(request.getName())
                 .description(request.getDescription())
                 .user(user)
                 .build();
-
+        log.info("bucket is created : {}",bucket.getBucketName());
         bucketRepository.save(bucket);
 
         List<Parameter> param  = request.getParameters().stream()
@@ -47,6 +49,7 @@ public class BucketServiceImpl implements BucketService{
                         .parameterName(p.getName())
                         .isActive(true)
                         .parameterOrder(p.getParameterOrder()).build()).toList();
+        log.info("parameter is created : {}",param);
 
         parameterRepository.saveAll(param);
         return bucket;

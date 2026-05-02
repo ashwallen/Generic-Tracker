@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,24 +18,27 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api", consumes = "Application/json")
+@RequestMapping(path = "/api/buckets", consumes = "Application/json")
 @RequiredArgsConstructor
+//@CrossOrigin(origins = "http://localhost:3000")
 public class BucketController {
     private final BucketService bucketService;
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Bucket>>createBucket(@RequestBody BucketRequestDto request){
-            Bucket bucket = bucketService.createBucket(request);
-            ApiResponse<Bucket> response = ApiResponse.<Bucket>builder()
-                    .data(bucket)
-                    .status(HttpStatus.CREATED.value())
-                    .success(true)
-                    .message("Created Bucket Successfully").build();
-            return new ResponseEntity<>(response,HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<Bucket>>createBucket(@RequestBody BucketRequestDto request,Authentication authentication){
+        UUID userId = UUID.fromString(authentication.getName());
+        request.setUserId(userId);
+        Bucket bucket = bucketService.createBucket(request);
+        ApiResponse<Bucket> response = ApiResponse.<Bucket>builder()
+                .data(bucket)
+                .status(HttpStatus.CREATED.value())
+                .success(true)
+                .message("Created Bucket Successfully").build();
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
     @GetMapping("/get")
-    public ResponseEntity<ApiResponse<List<BucketDto>>>fetchBuckets(@RequestParam String id){
-        UUID userId = UUID.fromString(id);
-//        UUID userId = UUID.fromString(authentication.getName());
+    public ResponseEntity<ApiResponse<List<BucketDto>>>fetchBuckets(Authentication authentication){
+//        UUID userId = UUID.fromString(id);
+        UUID userId = UUID.fromString(authentication.getName());
         List<BucketDto>buckets = bucketService.fetchBucket(userId);
         ApiResponse<List<BucketDto>>response = ApiResponse.<List<BucketDto>>builder()
                 .data(buckets)
